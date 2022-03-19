@@ -23,4 +23,9 @@ public class JavaController {
         javaService.store(java);
     }
 
+    @DeleteMapping("{javaVersion}")
+    public void removeJavaVersion(@PathVariable String javaVersion) {
+        javaService.delete(javaVersion);
+    }
+
 }

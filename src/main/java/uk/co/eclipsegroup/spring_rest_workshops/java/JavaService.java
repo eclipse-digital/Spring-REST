@@ -19,4 +19,8 @@ public class JavaService {
     public void store(Java java) {
         javaRepository.save(java);
     }
+
+    public void delete(String javaVersion) {
+        javaRepository.remove(javaVersion);
+    }
 }

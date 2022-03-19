@@ -16,4 +16,8 @@ public class JavaRepository {
     public void save(Java java) {
         repository.add(java);
     }
+
+    public void remove(String javaVersion) {
+        repository.removeIf(j -> j.getName().equals(javaVersion));
+    }
 }
