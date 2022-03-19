@@ -15,4 +15,8 @@ public class JavaService {
     public List<Java> list() {
         return javaRepository.fetchAll();
     }
+
+    public void store(Java java) {
+        javaRepository.save(java);
+    }
 }

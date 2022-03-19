@@ -6,12 +6,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -22,15 +24,19 @@ class JavaControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-
     @Test
-    void javaVersions_canBeFetched() throws Exception {
-        var javaVersions = objectMapper.readValue(mvc.perform(get("/java"))
+    void javaVersions_canBeStored_andRead() throws Exception {
+        var firstJava = new Java("JDK 1.0", 1.0);
+        mvc.perform(post("/java")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(firstJava)));
+
+        var fetchedJavaVersions = objectMapper.readValue(mvc.perform(get("/java"))
                 .andReturn()
                 .getResponse()
                 .getContentAsString(), new TypeReference<List<Java>>() {
         });
 
-        assertThat(javaVersions).isNotEmpty();
+        assertThat(fetchedJavaVersions).containsExactly(firstJava);
     }
 }

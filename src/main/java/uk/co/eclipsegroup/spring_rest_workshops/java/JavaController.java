@@ -1,8 +1,6 @@
 package uk.co.eclipsegroup.spring_rest_workshops.java;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -18,6 +16,11 @@ public class JavaController {
     @GetMapping
     public List<Java> javaVersions() {
         return javaService.list();
+    }
+
+    @PostMapping
+    public void addJavaVersion(@RequestBody Java java) {
+        javaService.store(java);
     }
 
 }
