@@ -1,5 +1,6 @@
 package uk.co.eclipsegroup.spring_rest_workshops.java;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,6 +27,11 @@ public class JavaController {
     @DeleteMapping("{javaVersion}")
     public void removeJavaVersion(@PathVariable String javaVersion) {
         javaService.delete(javaVersion);
+    }
+
+    @GetMapping(value = "chart", produces = MediaType.IMAGE_PNG_VALUE)
+    public byte[] chart() {
+        return javaService.toChart();
     }
 
 }
