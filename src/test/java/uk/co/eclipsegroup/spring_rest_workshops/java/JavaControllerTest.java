@@ -36,6 +36,17 @@ class JavaControllerTest {
     }
 
     @Test
+    void multipleJavaVersions_canBeStored_andRead() throws Exception {
+        var firstJava = new Java("JDK 1.0", 1.0);
+        var secondJava = new Java("JDK 1.1", 1.1);
+        store(firstJava, secondJava);
+
+        var fetchedJavaVersions = fetchAll();
+
+        assertThat(fetchedJavaVersions).containsExactly(firstJava, secondJava);
+    }
+
+    @Test
     void javaVersions_canBeRemoved() throws Exception {
         var firstJava = new Java("JDK 1.0", 1.0);
         var secondJava = new Java("JDK 1.1", 1.1);
@@ -50,10 +61,10 @@ class JavaControllerTest {
         assertThat(fetchedJavaVersions).containsExactly(secondJava);
     }
 
-    private void store(Java firstJava) throws Exception {
+    private void store(Java... javaVersions) throws Exception {
         mvc.perform(post("/java")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(firstJava)));
+                .content(objectMapper.writeValueAsString(javaVersions)));
     }
 
     private List<Java> fetchAll() throws Exception {

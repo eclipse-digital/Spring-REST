@@ -3,6 +3,7 @@ package uk.co.eclipsegroup.spring_rest_workshops.java;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -20,7 +21,7 @@ public class JavaController {
     }
 
     @PostMapping
-    public void addJavaVersion(@RequestBody Java java) {
+    public void addJavaVersion(@RequestBody List<Java> java) {
         javaService.store(java);
     }
 

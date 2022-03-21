@@ -19,8 +19,8 @@ public class JavaService {
         return javaRepository.fetchAll();
     }
 
-    public void store(Java java) {
-        javaRepository.save(java);
+    public void store(List<Java> javaVersions) {
+        javaVersions.forEach(javaRepository::save);
     }
 
     public void delete(String javaVersion) {
