@@ -19,7 +19,7 @@ public class JavaVersionController {
     }
 
     @PostMapping
-    public void addJavaVersion(@RequestBody JavaVersion javaVersion) {
-        javaVersionService.store(javaVersion);
+    public void addJavaVersion(@RequestBody List<JavaVersion> javaVersions) {
+        javaVersionService.store(javaVersions);
     }
 }

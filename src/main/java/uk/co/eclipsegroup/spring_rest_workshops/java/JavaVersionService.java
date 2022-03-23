@@ -16,7 +16,7 @@ public class JavaVersionService {
         return javaVersionRepository.fetchAll();
     }
 
-    public void store(JavaVersion javaVersion) {
-        javaVersionRepository.save(javaVersion);
+    public void store(List<JavaVersion> javaVersions) {
+        javaVersionRepository.save(javaVersions);
     }
 }

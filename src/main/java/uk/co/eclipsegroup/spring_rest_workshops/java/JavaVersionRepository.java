@@ -13,7 +13,7 @@ public class JavaVersionRepository {
         return javaVersions;
     }
 
-    public void save(JavaVersion javaVersion) {
-        javaVersions.add(javaVersion);
+    public void save(List<JavaVersion> javaVersions) {
+        this.javaVersions.addAll(javaVersions);
     }
 }

@@ -26,7 +26,7 @@ class JavaVersionControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void javaVersions_canBeStored_andFetched() throws Exception {
+    void javaVersion_canBeStored_andFetched() throws Exception {
         var javaVersion = objectMapper.writeValueAsString(new JavaVersion("Java 5", 5.0));
         mockMvc.perform(post("/java")
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
@@ -36,5 +36,18 @@ class JavaVersionControllerTest {
         });
 
         assertThat(javaVersions).containsExactly(new JavaVersion("Java 5", 5.0));
+    }
+
+    @Test
+    void javaVersions_canBeStored_andFetched() throws Exception {
+        var javaVersion = objectMapper.writeValueAsString(List.of(new JavaVersion("Java 1.1", 1.1), new JavaVersion("Java 5", 5.0)));
+        mockMvc.perform(post("/java")
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .content(javaVersion)).andReturn();
+        var mvcResult = mockMvc.perform(get("/java")).andReturn();
+        var javaVersions = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), new TypeReference<List<JavaVersion>>() {
+        });
+
+        assertThat(javaVersions).containsExactly(new JavaVersion("Java 1.1", 1.1), new JavaVersion("Java 5", 5.0));
     }
 }
