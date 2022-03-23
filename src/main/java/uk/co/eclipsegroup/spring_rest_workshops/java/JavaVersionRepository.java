@@ -6,15 +6,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class JavaRepository {
-    private final List<Java> repository = new ArrayList<>();
+public class JavaVersionRepository {
+    private final List<JavaVersion> repository = new ArrayList<>();
 
-    public List<Java> fetchAll() {
+    public List<JavaVersion> fetchAll() {
         return repository;
     }
 
-    public void save(Java java) {
-        repository.add(java);
+    public void save(JavaVersion javaVersion) {
+        repository.add(javaVersion);
     }
 
     public void remove(String javaVersion) {

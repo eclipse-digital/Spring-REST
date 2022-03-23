@@ -8,31 +8,31 @@ import java.util.List;
 
 @RestController
 @RequestMapping("java")
-public class JavaController {
-    private final JavaService javaService;
+public class JavaVersionController {
+    private final JavaVersionService javaVersionService;
 
-    public JavaController(JavaService javaService) {
-        this.javaService = javaService;
+    public JavaVersionController(JavaVersionService javaVersionService) {
+        this.javaVersionService = javaVersionService;
     }
 
     @GetMapping
-    public List<Java> javaVersions() {
-        return javaService.list();
+    public List<JavaVersion> javaVersions() {
+        return javaVersionService.list();
     }
 
     @PostMapping
-    public void addJavaVersion(@RequestBody List<Java> java) {
-        javaService.store(java);
+    public void addJavaVersion(@RequestBody List<JavaVersion> javaVersion) {
+        javaVersionService.store(javaVersion);
     }
 
     @DeleteMapping("{javaVersion}")
     public void removeJavaVersion(@PathVariable String javaVersion) {
-        javaService.delete(javaVersion);
+        javaVersionService.delete(javaVersion);
     }
 
     @GetMapping(value = "chart", produces = MediaType.IMAGE_PNG_VALUE)
     public ResponseEntity<byte[]> chart() {
-        return javaService.toChart();
+        return javaVersionService.toChart();
     }
 
 }

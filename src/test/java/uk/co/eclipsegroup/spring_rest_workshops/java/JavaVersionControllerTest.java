@@ -18,7 +18,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @AutoConfigureMockMvc
-class JavaControllerTest {
+class JavaVersionControllerTest {
     @Autowired
     private MockMvc mvc;
 
@@ -27,7 +27,7 @@ class JavaControllerTest {
 
     @Test
     void javaVersions_canBeStored_andRead() throws Exception {
-        var firstJava = new Java("JDK 1.0", 1.0);
+        var firstJava = new JavaVersion("JDK 1.0", 1.0);
         store(firstJava);
 
         var fetchedJavaVersions = fetchAll();
@@ -37,8 +37,8 @@ class JavaControllerTest {
 
     @Test
     void multipleJavaVersions_canBeStored_andRead() throws Exception {
-        var firstJava = new Java("JDK 1.0", 1.0);
-        var secondJava = new Java("JDK 1.1", 1.1);
+        var firstJava = new JavaVersion("JDK 1.0", 1.0);
+        var secondJava = new JavaVersion("JDK 1.1", 1.1);
         store(firstJava, secondJava);
 
         var fetchedJavaVersions = fetchAll();
@@ -48,8 +48,8 @@ class JavaControllerTest {
 
     @Test
     void javaVersions_canBeRemoved() throws Exception {
-        var firstJava = new Java("JDK 1.0", 1.0);
-        var secondJava = new Java("JDK 1.1", 1.1);
+        var firstJava = new JavaVersion("JDK 1.0", 1.0);
+        var secondJava = new JavaVersion("JDK 1.1", 1.1);
 
         store(firstJava);
         store(secondJava);
@@ -61,13 +61,13 @@ class JavaControllerTest {
         assertThat(fetchedJavaVersions).containsExactly(secondJava);
     }
 
-    private void store(Java... javaVersions) throws Exception {
+    private void store(JavaVersion... javaVersions) throws Exception {
         mvc.perform(post("/java")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(javaVersions)));
     }
 
-    private List<Java> fetchAll() throws Exception {
+    private List<JavaVersion> fetchAll() throws Exception {
         return objectMapper.readValue(mvc.perform(get("/java"))
                 .andReturn()
                 .getResponse()

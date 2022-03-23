@@ -2,11 +2,11 @@ package uk.co.eclipsegroup.spring_rest_workshops.java;
 
 import java.util.Objects;
 
-public class Java {
+public class JavaVersion {
     private final String name;
     private final Double version;
 
-    public Java(String name, Double version) {
+    public JavaVersion(String name, Double version) {
         this.name = name;
         this.version = version;
     }
@@ -31,8 +31,8 @@ public class Java {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Java java = (Java) o;
-        return Objects.equals(name, java.name) && Objects.equals(version, java.version);
+        JavaVersion javaVersion = (JavaVersion) o;
+        return Objects.equals(name, javaVersion.name) && Objects.equals(version, javaVersion.version);
     }
 
     @Override

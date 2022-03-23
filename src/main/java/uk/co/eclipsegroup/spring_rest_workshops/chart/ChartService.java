@@ -7,7 +7,7 @@ import uk.co.eclipsegroup.spring_rest_workshops.chart.request.Chart;
 import uk.co.eclipsegroup.spring_rest_workshops.chart.request.ChartRequest;
 import uk.co.eclipsegroup.spring_rest_workshops.chart.request.Data;
 import uk.co.eclipsegroup.spring_rest_workshops.chart.request.Datasets;
-import uk.co.eclipsegroup.spring_rest_workshops.java.Java;
+import uk.co.eclipsegroup.spring_rest_workshops.java.JavaVersion;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,22 +16,22 @@ import java.util.stream.Collectors;
 public class ChartService {
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public ResponseEntity<byte[]> requestChart(List<Java> javaVersions) {
+    public ResponseEntity<byte[]> requestChart(List<JavaVersion> javaVersions) {
         var chartRequest = fromJavaVersions(javaVersions);
         var headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
         return restTemplate.exchange("https://quickchart.io/chart", HttpMethod.POST, new HttpEntity<>(chartRequest, headers), byte[].class);
     }
 
-    ChartRequest fromJavaVersions(List<Java> javaVersions) {
+    ChartRequest fromJavaVersions(List<JavaVersion> javaVersions) {
         return new ChartRequest(new Chart("bar", new Data(labelsFrom(javaVersions), List.of(new Datasets("Version", dataFrom(javaVersions))))));
     }
 
-    private List<String> dataFrom(List<Java> javaVersions) {
-        return javaVersions.stream().map(Java::getVersion).map(String::valueOf).collect(Collectors.toList());
+    private List<String> dataFrom(List<JavaVersion> javaVersions) {
+        return javaVersions.stream().map(JavaVersion::getVersion).map(String::valueOf).collect(Collectors.toList());
     }
 
-    private List<String> labelsFrom(List<Java> javaVersions) {
-        return javaVersions.stream().map(Java::getName).collect(Collectors.toList());
+    private List<String> labelsFrom(List<JavaVersion> javaVersions) {
+        return javaVersions.stream().map(JavaVersion::getName).collect(Collectors.toList());
     }
 }
