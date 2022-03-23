@@ -1,0 +1,8 @@
+### Add java version
+POST http://localhost:8080/java
+Content-Type: application/json
+
+{
+  "name": "Java 5",
+  "version": 5
+}
