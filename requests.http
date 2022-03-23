@@ -1,8 +1,8 @@
 ### Request all Java Versions
-GET http://localhost:8080/java
+GET {{host}}/java
 
 ### Add single Java Version
-POST http://localhost:8080/java
+POST {{host}}/java
 Content-Type: application/json
 
 {
@@ -11,10 +11,10 @@ Content-Type: application/json
 }
 
 ### Remove Java Version
-DELETE http://localhost:8080/java/JDK 1.0
+DELETE {{host}}/java/JDK 1.0
 
 ### Add multitple Java Versions
-POST http://localhost:8080/java
+POST {{host}}/java
 Content-Type: application/json
 
 [
@@ -112,7 +112,7 @@ Content-Type: application/json
 GET https://quickchart.io/chart?c={type:'bar',data:{labels:['Java%201.0','Java%201.1','Java%202'],%20datasets:[{label:'Version',data:[1.0,1.1,2]}]}}
 
 ### Request chart with GET
-GET http://localhost:8080/java/chart
+GET {{host}}/java/chart
 
 ### Request chart directly with POST
 POST https://quickchart.io/chart
