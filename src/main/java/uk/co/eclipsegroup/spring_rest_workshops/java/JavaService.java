@@ -1,5 +1,6 @@
 package uk.co.eclipsegroup.spring_rest_workshops.java;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import uk.co.eclipsegroup.spring_rest_workshops.chart.ChartService;
 
@@ -27,7 +28,7 @@ public class JavaService {
         javaRepository.remove(javaVersion);
     }
 
-    public byte[] toChart() {
+    public ResponseEntity<byte[]> toChart() {
         return chartService.requestChart(javaRepository.fetchAll());
     }
 }

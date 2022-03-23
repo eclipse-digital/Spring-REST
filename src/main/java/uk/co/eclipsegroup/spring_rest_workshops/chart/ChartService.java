@@ -1,35 +1,37 @@
 package uk.co.eclipsegroup.spring_rest_workshops.chart;
 
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
+import uk.co.eclipsegroup.spring_rest_workshops.chart.request.Chart;
+import uk.co.eclipsegroup.spring_rest_workshops.chart.request.ChartRequest;
+import uk.co.eclipsegroup.spring_rest_workshops.chart.request.Data;
+import uk.co.eclipsegroup.spring_rest_workshops.chart.request.Datasets;
 import uk.co.eclipsegroup.spring_rest_workshops.java.Java;
 
-import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class ChartService {
     private final RestTemplate restTemplate = new RestTemplate();
-    private final String queryTemplate = "https://quickchart.io/chart?c={\"type\":\"bar\",\"data\":{\"labels\":[%s], \"datasets\":[{\"label\":\"Version\",\"data\":[%s]}]}}";
 
-    public byte[] requestChart(List<Java> javaVersions) {
-        ResponseEntity<byte[]> forObject = restTemplate.exchange(requestUri(javaVersions), HttpMethod.GET, null, byte[].class);
-        return forObject.getBody();
+    public ResponseEntity<byte[]> requestChart(List<Java> javaVersions) {
+        var chartRequest = fromJavaVersions(javaVersions);
+        var headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        return restTemplate.exchange("https://quickchart.io/chart", HttpMethod.POST, new HttpEntity<>(chartRequest, headers), byte[].class);
     }
 
-    private URI requestUri(List<Java> javaVersions) {
-        return UriComponentsBuilder.fromUriString(String.format(queryTemplate, labelsFrom(javaVersions), dataFrom(javaVersions))).build().encode().toUri();
+    ChartRequest fromJavaVersions(List<Java> javaVersions) {
+        return new ChartRequest(new Chart("bar", new Data(labelsFrom(javaVersions), List.of(new Datasets("Version", dataFrom(javaVersions))))));
     }
 
-    private String dataFrom(List<Java> javaVersions) {
-        return javaVersions.stream().map(Java::getVersion).map(String::valueOf).collect(Collectors.joining(","));
+    private List<String> dataFrom(List<Java> javaVersions) {
+        return javaVersions.stream().map(Java::getVersion).map(String::valueOf).collect(Collectors.toList());
     }
 
-    private String labelsFrom(List<Java> javaVersions) {
-        return javaVersions.stream().map(Java::getName).collect(Collectors.joining("\",\"", "\"", "\""));
+    private List<String> labelsFrom(List<Java> javaVersions) {
+        return javaVersions.stream().map(Java::getName).collect(Collectors.toList());
     }
 }
