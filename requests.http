@@ -1,0 +1,137 @@
+### Add single Java Version
+POST http://localhost:8080/java
+Content-Type: application/json
+
+{
+  "name": "JDK 1.0",
+  "version": 1.0
+}
+
+### Add multitple Java Versions
+POST http://localhost:8080/java
+Content-Type: application/json
+
+[
+  {
+    "name": "JDK 1.0",
+    "version": 1.0
+  },
+  {
+    "name": "JDK 1.1",
+    "version": 1.1
+  },
+  {
+    "name": "J2SE 1.2",
+    "version": 1.2
+  },
+  {
+    "name": "J2SE 1.3",
+    "version": 1.3
+  },
+  {
+    "name": "J2SE 1.4",
+    "version": 1.4
+  },
+  {
+    "name": "Java SE 5",
+    "version": 5
+  },
+  {
+    "name": "Java SE 6",
+    "version": 6
+  },
+  {
+    "name": "Java SE 7",
+    "version": 7
+  },
+  {
+    "name": "Java SE 8 (LTS)",
+    "version": 8
+  },
+  {
+    "name": "Java SE 9",
+    "version": 9
+  },
+  {
+    "name": "Java SE 10",
+    "version": 10
+  },
+  {
+    "name": "Java SE 11 (LTS)",
+    "version": 11
+  },
+  {
+    "name": "Java SE 12",
+    "version": 12
+  },
+  {
+    "name": "Java SE 13",
+    "version": 13
+  },
+  {
+    "name": "Java SE 14",
+    "version": 14
+  },
+  {
+    "name": "Java SE 15",
+    "version": 15
+  },
+  {
+    "name": "Java SE 16",
+    "version": 16
+  },
+  {
+    "name": "Java SE 17 (LTS)",
+    "version": 17
+  },
+  {
+    "name": "Java SE 18",
+    "version": 18
+  },
+  {
+    "name": "Java SE 19 (Future Release)",
+    "version": 19
+  },
+  {
+    "name": "Java SE 20 (Future Release)",
+    "version": 20
+  },
+  {
+    "name": "Java SE 21 (LTS) (Future Release)",
+    "version": 21
+  }
+]
+
+### Request all Java Versions
+GET http://localhost:8080/java
+
+### Request chart directly with GET
+GET https://quickchart.io/chart?c={type:'bar',data:{labels:['Java%201.0','Java%201.1','Java%202'],%20datasets:[{label:'Version',data:[1.0,1.1,2]}]}}
+
+### Request chart directly with POST
+POST https://quickchart.io/chart
+Content-Type: application/json
+
+{
+  "chart": {
+    "type": "bar",
+    "data": {
+      "labels": [
+        "JDK 1.0",
+        "JDK 1.1"
+      ],
+      "datasets": [
+        {
+          "label": "Version",
+          "data": [
+            1.0,
+            1.1
+          ]
+        }
+      ]
+    }
+  }
+}
+
+### Request chart with GET
+GET http://localhost:8080/java/chart
