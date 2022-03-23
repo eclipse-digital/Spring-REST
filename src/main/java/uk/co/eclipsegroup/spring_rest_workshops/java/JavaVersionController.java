@@ -1,17 +1,25 @@
 package uk.co.eclipsegroup.spring_rest_workshops.java;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("java")
 public class JavaVersionController {
+    private final JavaVersionService javaVersionService;
+
+    public JavaVersionController(JavaVersionService javaVersionService) {
+        this.javaVersionService = javaVersionService;
+    }
 
     @GetMapping
     public List<JavaVersion> list() {
-        return List.of(new JavaVersion("Java 1.1", 1.1), new JavaVersion("Java 1.2", 1.2));
+        return javaVersionService.getAll();
+    }
+
+    @PostMapping
+    public void addJavaVersion(@RequestBody JavaVersion javaVersion) {
+        javaVersionService.store(javaVersion);
     }
 }
