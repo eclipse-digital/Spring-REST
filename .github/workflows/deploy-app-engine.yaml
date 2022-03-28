@@ -1,10 +1,7 @@
 
 name: Pull Request Validaion
 
-on:
-  push:
-    branches:
-      - main
+on: pull_request
 
 jobs:
   build:
@@ -20,12 +17,12 @@ jobs:
           distribution: 'adopt'
           cache: gradle
 
-      - uses: actions/gcloud/auth@master
+      - uses: google-github-actions/auth@v0
         env:
           GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
 
       - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v0'
+        uses: google-github-actions/setup-gcloud@v0
         with:
           project_id: ${{ secrets.PROJECT_ID }}
 
