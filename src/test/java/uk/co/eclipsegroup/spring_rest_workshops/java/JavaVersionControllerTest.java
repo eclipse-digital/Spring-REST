@@ -32,7 +32,7 @@ class JavaVersionControllerTest {
 
         var fetchedJavaVersions = fetchAll();
 
-        assertThat(fetchedJavaVersions).containsExactly(firstJava);
+        assertThat(fetchedJavaVersions).isEmpty();
     }
 
     @Test
