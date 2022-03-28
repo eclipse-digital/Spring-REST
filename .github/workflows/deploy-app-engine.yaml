@@ -1,5 +1,5 @@
 
-name: Pull Request Validaion
+name: Deploy appEngine
 
 on: pull_request
 
@@ -17,9 +17,9 @@ jobs:
           distribution: 'adopt'
           cache: gradle
 
-      - uses: google-github-actions/auth@v0
+      - uses: google-github-actions/auth@v0.6.0
         env:
-          credentials_json: ${{ secrets.GCLOUD_AUTH }}
+          credentials_json: '${{ secrets.GCLOUD_AUTH }}'
 
       - name: 'Set up Cloud SDK'
         uses: google-github-actions/setup-gcloud@v0
