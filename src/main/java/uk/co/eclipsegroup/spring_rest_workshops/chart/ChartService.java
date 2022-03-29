@@ -18,8 +18,7 @@ public class ChartService {
     public ResponseEntity<byte[]> createChart(List<JavaVersion> javaVersions) {
         var javaVersionNames = javaVersions.stream()
                 .map(JavaVersion::getName)
-                .map(name -> "'" + name + "'")
-                .collect(Collectors.joining(","));
+                .collect(Collectors.joining(",", "'", "'"));
 
         var javaVersionValues = javaVersions.stream()
                 .map(JavaVersion::getVersion)
