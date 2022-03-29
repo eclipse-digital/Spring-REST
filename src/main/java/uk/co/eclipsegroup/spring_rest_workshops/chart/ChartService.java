@@ -7,7 +7,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 import uk.co.eclipsegroup.spring_rest_workshops.java.JavaVersion;
 
-import java.net.URISyntaxException;
 import java.util.List;
 import java.util.stream.Collectors;
 
