@@ -8,17 +8,14 @@ import uk.co.eclipsegroup.spring_rest_workshops.chart.request.factory.ChartReque
 import uk.co.eclipsegroup.spring_rest_workshops.java.JavaVersion;
 
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 public class ChartService {
     private final RestTemplate restTemplate = new RestTemplate();
-    private final Map<String, ChartRequestFactory> chartRequestFactories;
+    private final List<ChartRequestFactory> chartRequestFactories;
 
     public ChartService(List<ChartRequestFactory> chartRequestFactories) {
-        this.chartRequestFactories = chartRequestFactories.stream().collect(Collectors.toMap(ChartRequestFactory::type, Function.identity()));
+        this.chartRequestFactories = chartRequestFactories;
     }
 
     public ResponseEntity<byte[]> requestChart(List<JavaVersion> javaVersions, String type) {
@@ -27,12 +24,11 @@ public class ChartService {
     }
 
     ChartRequest fromJavaVersions(List<JavaVersion> javaVersions, String type) {
-        var chartRequestFactory = chartRequestFactories.get(type);
-        if (chartRequestFactory != null) {
-            return chartRequestFactory.create(javaVersions);
-        } else {
-            throw new IllegalArgumentException("Only `bar` or `line` chart types allowed, `" + type + "` given.");
-        }
+        return chartRequestFactories.stream()
+                .filter(f -> f.supports(type))
+                .map(f -> f.create(javaVersions))
+                .findFirst()
+                .orElseThrow(() -> new ChartRequestFactoryNotFoundException(type, chartRequestFactories));
     }
 
     private HttpHeaders json() {

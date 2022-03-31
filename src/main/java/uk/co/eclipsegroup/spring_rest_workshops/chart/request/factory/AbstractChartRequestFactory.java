@@ -21,4 +21,14 @@ public abstract class AbstractChartRequestFactory implements ChartRequestFactory
     List<String> labelsFrom(List<JavaVersion> javaVersions) {
         return javaVersions.stream().map(JavaVersion::getName).collect(Collectors.toList());
     }
+
+    @Override
+    public boolean supports(String type) {
+        return type.equals(type());
+    }
+
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + ": " + type();
+    }
 }
