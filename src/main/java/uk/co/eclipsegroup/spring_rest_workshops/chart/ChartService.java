@@ -22,7 +22,13 @@ public class ChartService {
     }
 
     ChartRequest fromJavaVersions(List<JavaVersion> javaVersions, String type) {
-        return new ChartRequest(new Chart(type, new Data(labelsFrom(javaVersions), List.of(new Datasets("Version", dataFrom(javaVersions))))));
+        if (type.equals("bar")) {
+            return new ChartRequest(new Chart("bar", new Data(labelsFrom(javaVersions), List.of(new Datasets("Version", dataFrom(javaVersions))))));
+        } else if (type.equals("line")) {
+            return new ChartRequest(new Chart("line", new Data(labelsFrom(javaVersions), List.of(new Datasets("Version", dataFrom(javaVersions))))));
+        } else {
+            throw new IllegalArgumentException("Only `bar` or `line` chart types allowed, `" + type + "` given.");
+        }
     }
 
     private HttpHeaders json() {

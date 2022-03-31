@@ -9,6 +9,8 @@ import uk.co.eclipsegroup.spring_rest_workshops.java.JavaVersion;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
+
 @ExtendWith(SoftAssertionsExtension.class)
 class ChartServiceTest {
     private final ChartService chartService = new ChartService();
@@ -42,5 +44,10 @@ class ChartServiceTest {
                 .containsExactly(new Datasets("Version", List.of("1.0", "1.1")));
         softly.assertThat(chartRequest.getChart().getData().getLabels())
                 .containsExactly("Java 1.0", "Java 1.1");
+    }
+
+    @Test
+    void cannotCreate_chartOtherThan_barOrLine() {
+        assertThatCode(() -> chartService.fromJavaVersions(List.of(), "")).isExactlyInstanceOf(IllegalArgumentException.class);
     }
 }
