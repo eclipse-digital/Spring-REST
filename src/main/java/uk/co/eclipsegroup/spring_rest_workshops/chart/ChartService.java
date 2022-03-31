@@ -4,14 +4,22 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import uk.co.eclipsegroup.spring_rest_workshops.chart.request.*;
+import uk.co.eclipsegroup.spring_rest_workshops.chart.request.factory.BarChartRequestFactory;
+import uk.co.eclipsegroup.spring_rest_workshops.chart.request.factory.ChartRequestFactory;
+import uk.co.eclipsegroup.spring_rest_workshops.chart.request.factory.LineChartRequestFactory;
 import uk.co.eclipsegroup.spring_rest_workshops.java.JavaVersion;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
 public class ChartService {
     private final RestTemplate restTemplate = new RestTemplate();
+    private final Map<String, ChartRequestFactory> chartRequestFactories = Map.of(
+            "bar", new BarChartRequestFactory(),
+            "line", new LineChartRequestFactory()
+    );
 
     public ResponseEntity<byte[]> requestChart(List<JavaVersion> javaVersions, String type) {
         var chartRequest = fromJavaVersions(javaVersions, type);
@@ -19,10 +27,9 @@ public class ChartService {
     }
 
     ChartRequest fromJavaVersions(List<JavaVersion> javaVersions, String type) {
-        if (type.equals("bar")) {
-            return chart("bar", javaVersions, List.of(new BarDatasets("Version", dataFrom(javaVersions))));
-        } else if (type.equals("line")) {
-            return chart("line", javaVersions, List.of(new LineDatasets("Version", dataFrom(javaVersions), false, "pink")));
+        var chartRequestFactory = chartRequestFactories.get(type);
+        if (chartRequestFactory != null) {
+            return chartRequestFactory.create(javaVersions);
         } else {
             throw new IllegalArgumentException("Only `bar` or `line` chart types allowed, `" + type + "` given.");
         }
