@@ -3,10 +3,7 @@ package uk.co.eclipsegroup.spring_rest_workshops.chart;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import uk.co.eclipsegroup.spring_rest_workshops.chart.request.Chart;
-import uk.co.eclipsegroup.spring_rest_workshops.chart.request.ChartRequest;
-import uk.co.eclipsegroup.spring_rest_workshops.chart.request.Data;
-import uk.co.eclipsegroup.spring_rest_workshops.chart.request.Datasets;
+import uk.co.eclipsegroup.spring_rest_workshops.chart.request.*;
 import uk.co.eclipsegroup.spring_rest_workshops.java.JavaVersion;
 
 import java.util.List;
@@ -23,12 +20,16 @@ public class ChartService {
 
     ChartRequest fromJavaVersions(List<JavaVersion> javaVersions, String type) {
         if (type.equals("bar")) {
-            return new ChartRequest(new Chart("bar", new Data(labelsFrom(javaVersions), List.of(new Datasets("Version", dataFrom(javaVersions))))));
+            return chart("bar", javaVersions, List.of(new BarDatasets("Version", dataFrom(javaVersions))));
         } else if (type.equals("line")) {
-            return new ChartRequest(new Chart("line", new Data(labelsFrom(javaVersions), List.of(new Datasets("Version", dataFrom(javaVersions))))));
+            return chart("line", javaVersions, List.of(new LineDatasets("Version", dataFrom(javaVersions), false, "pink")));
         } else {
             throw new IllegalArgumentException("Only `bar` or `line` chart types allowed, `" + type + "` given.");
         }
+    }
+
+    private ChartRequest chart(String bar, List<JavaVersion> javaVersions, List<Datasets> datasets) {
+        return new ChartRequest(new Chart(bar, new Data(labelsFrom(javaVersions), datasets)));
     }
 
     private HttpHeaders json() {
