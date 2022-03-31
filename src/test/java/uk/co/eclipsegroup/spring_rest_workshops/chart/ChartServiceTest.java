@@ -8,6 +8,7 @@ import uk.co.eclipsegroup.spring_rest_workshops.chart.request.BarDatasets;
 import uk.co.eclipsegroup.spring_rest_workshops.chart.request.Datasets;
 import uk.co.eclipsegroup.spring_rest_workshops.chart.request.LineDatasets;
 import uk.co.eclipsegroup.spring_rest_workshops.chart.request.factory.BarChartRequestFactory;
+import uk.co.eclipsegroup.spring_rest_workshops.chart.request.factory.ChartType;
 import uk.co.eclipsegroup.spring_rest_workshops.chart.request.factory.LineChartRequestFactory;
 import uk.co.eclipsegroup.spring_rest_workshops.java.JavaVersion;
 
@@ -21,7 +22,7 @@ class ChartServiceTest {
 
     @Test
     void emptyChartRequest_isCreated_forEmptyDataset(SoftAssertions softly) {
-        var chartRequest = chartService.fromJavaVersions(List.of(), "bar");
+        var chartRequest = chartService.fromJavaVersions(List.of(), ChartType.BAR);
 
         softly.assertThat(chartRequest.getChart().getType()).isEqualTo("bar");
         softly.assertThat(chartRequest.getChart().getData().getLabels()).isEmpty();
@@ -30,7 +31,7 @@ class ChartServiceTest {
 
     @Test
     void chartRequest_contains_oneJavaVersion(SoftAssertions softly) {
-        var chartRequest = chartService.fromJavaVersions(List.of(new JavaVersion("Java 1.0", 1.0)), "line");
+        var chartRequest = chartService.fromJavaVersions(List.of(new JavaVersion("Java 1.0", 1.0)), ChartType.LINE);
 
         softly.assertThat(chartRequest.getChart().getType()).isEqualTo("line");
         softly.assertThat(chartRequest.getChart().getData().getDatasets())
@@ -41,7 +42,7 @@ class ChartServiceTest {
 
     @Test
     void chartRequest_contains_javaVersions(SoftAssertions softly) {
-        var chartRequest = chartService.fromJavaVersions(List.of(new JavaVersion("Java 1.0", 1.0), new JavaVersion("Java 1.1", 1.1)), "bar");
+        var chartRequest = chartService.fromJavaVersions(List.of(new JavaVersion("Java 1.0", 1.0), new JavaVersion("Java 1.1", 1.1)), ChartType.BAR);
 
         softly.assertThat(chartRequest.getChart().getType()).isEqualTo("bar");
         softly.assertThat(chartRequest.getChart().getData().getDatasets())
@@ -52,6 +53,6 @@ class ChartServiceTest {
 
     @Test
     void cannotCreate_chartOtherThan_barOrLine() {
-        assertThatCode(() -> chartService.fromJavaVersions(List.of(), "")).isExactlyInstanceOf(ChartRequestFactoryNotFoundException.class);
+        assertThatCode(() -> chartService.fromJavaVersions(List.of(), null)).isExactlyInstanceOf(ChartRequestFactoryNotFoundException.class);
     }
 }

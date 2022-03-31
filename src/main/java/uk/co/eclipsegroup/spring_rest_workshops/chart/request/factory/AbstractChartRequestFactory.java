@@ -10,8 +10,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class AbstractChartRequestFactory implements ChartRequestFactory{
+    private final ChartType chartType;
+
+    protected AbstractChartRequestFactory(ChartType chartType) {
+        this.chartType = chartType;
+    }
+
     protected ChartRequest chart(List<JavaVersion> javaVersions, List<Datasets> datasets) {
-        return new ChartRequest(new Chart(type(), new Data(labelsFrom(javaVersions), datasets)));
+        return new ChartRequest(new Chart(chartType.chartTypeName(), new Data(labelsFrom(javaVersions), datasets)));
     }
 
     protected List<String> dataFrom(List<JavaVersion> javaVersions) {
@@ -23,12 +29,12 @@ public abstract class AbstractChartRequestFactory implements ChartRequestFactory
     }
 
     @Override
-    public boolean supports(String type) {
-        return type.equals(type());
+    public boolean supports(ChartType type) {
+        return chartType == type;
     }
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + ": " + type();
+        return getClass().getSimpleName() + ": " + chartType;
     }
 }

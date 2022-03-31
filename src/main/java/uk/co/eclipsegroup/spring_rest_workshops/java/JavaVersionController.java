@@ -2,6 +2,7 @@ package uk.co.eclipsegroup.spring_rest_workshops.java;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import uk.co.eclipsegroup.spring_rest_workshops.chart.request.factory.ChartType;
 
 import java.net.URISyntaxException;
 import java.util.List;
@@ -26,7 +27,7 @@ public class JavaVersionController {
     }
 
     @GetMapping("chart/{type}")
-    public ResponseEntity<byte[]> getChart(@PathVariable String type) {
+    public ResponseEntity<byte[]> getChart(@PathVariable ChartType type) {
         return javaVersionService.generateChart(type);
     }
 }

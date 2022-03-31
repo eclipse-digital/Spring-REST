@@ -8,13 +8,13 @@ import java.util.List;
 
 @Component
 public class BarChartRequestFactory extends AbstractChartRequestFactory {
+    public BarChartRequestFactory() {
+        super(ChartType.BAR);
+    }
+
     @Override
     public ChartRequest create(List<JavaVersion> javaVersions) {
         return chart(javaVersions, List.of(new BarDatasets("Version", dataFrom(javaVersions))));
     }
 
-    @Override
-    public String type() {
-        return "bar";
-    }
 }

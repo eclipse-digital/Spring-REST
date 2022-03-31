@@ -3,6 +3,7 @@ package uk.co.eclipsegroup.spring_rest_workshops.java;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import uk.co.eclipsegroup.spring_rest_workshops.chart.ChartService;
+import uk.co.eclipsegroup.spring_rest_workshops.chart.request.factory.ChartType;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ public class JavaVersionService {
         javaVersionRepository.save(javaVersions);
     }
 
-    public ResponseEntity<byte[]> generateChart(String type) {
+    public ResponseEntity<byte[]> generateChart(ChartType type) {
         return chartService.requestChart(javaVersionRepository.fetchAll(), type);
     }
 }

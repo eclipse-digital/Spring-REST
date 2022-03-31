@@ -8,13 +8,12 @@ import java.util.List;
 
 @Component
 public class LineChartRequestFactory extends AbstractChartRequestFactory {
-    @Override
-    public ChartRequest create(List<JavaVersion> javaVersions) {
-        return chart(javaVersions, List.of(new LineDatasets("Version", dataFrom(javaVersions), false, "pink")));
+    public LineChartRequestFactory() {
+        super(ChartType.LINE);
     }
 
     @Override
-    public String type() {
-        return "line";
+    public ChartRequest create(List<JavaVersion> javaVersions) {
+        return chart(javaVersions, List.of(new LineDatasets("Version", dataFrom(javaVersions), false, "pink")));
     }
 }

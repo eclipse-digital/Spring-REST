@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import uk.co.eclipsegroup.spring_rest_workshops.chart.request.ChartRequest;
 import uk.co.eclipsegroup.spring_rest_workshops.chart.request.factory.ChartRequestFactory;
+import uk.co.eclipsegroup.spring_rest_workshops.chart.request.factory.ChartType;
 import uk.co.eclipsegroup.spring_rest_workshops.java.JavaVersion;
 
 import java.util.List;
@@ -18,12 +19,12 @@ public class ChartService {
         this.chartRequestFactories = chartRequestFactories;
     }
 
-    public ResponseEntity<byte[]> requestChart(List<JavaVersion> javaVersions, String type) {
+    public ResponseEntity<byte[]> requestChart(List<JavaVersion> javaVersions, ChartType type) {
         var chartRequest = fromJavaVersions(javaVersions, type);
         return restTemplate.exchange("https://quickchart.io/chart", HttpMethod.POST, new HttpEntity<>(chartRequest, json()), byte[].class);
     }
 
-    ChartRequest fromJavaVersions(List<JavaVersion> javaVersions, String type) {
+    ChartRequest fromJavaVersions(List<JavaVersion> javaVersions, ChartType type) {
         return chartRequestFactories.stream()
                 .filter(f -> f.supports(type))
                 .map(f -> f.create(javaVersions))
