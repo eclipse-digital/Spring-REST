@@ -26,6 +26,6 @@ public class JavaVersionService {
     }
 
     public ResponseEntity<byte[]> generateChart() {
-        return chartService.createChart(javaVersionRepository.fetchAll());
+        return chartService.requestChart(javaVersionRepository.fetchAll());
     }
 }

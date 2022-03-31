@@ -1,10 +1,12 @@
 package uk.co.eclipsegroup.spring_rest_workshops.chart;
 
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
+import uk.co.eclipsegroup.spring_rest_workshops.chart.request.Chart;
+import uk.co.eclipsegroup.spring_rest_workshops.chart.request.ChartRequest;
+import uk.co.eclipsegroup.spring_rest_workshops.chart.request.Data;
+import uk.co.eclipsegroup.spring_rest_workshops.chart.request.Datasets;
 import uk.co.eclipsegroup.spring_rest_workshops.java.JavaVersion;
 
 import java.util.List;
@@ -14,18 +16,22 @@ import java.util.stream.Collectors;
 public class ChartService {
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public ResponseEntity<byte[]> createChart(List<JavaVersion> javaVersions) {
-        var javaVersionNames = javaVersions.stream()
-                .map(JavaVersion::getName)
-                .collect(Collectors.joining(",", "'", "'"));
+    public ResponseEntity<byte[]> requestChart(List<JavaVersion> javaVersions) {
+        var chartRequest = fromJavaVersions(javaVersions);
+        var headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        return restTemplate.exchange("https://quickchart.io/chart", HttpMethod.POST, new HttpEntity<>(chartRequest, headers), byte[].class);
+    }
 
-        var javaVersionValues = javaVersions.stream()
-                .map(JavaVersion::getVersion)
-                .map(String::valueOf)
-                .collect(Collectors.joining(","));
+    ChartRequest fromJavaVersions(List<JavaVersion> javaVersions) {
+        return new ChartRequest(new Chart("bar", new Data(labelsFrom(javaVersions), List.of(new Datasets("Version", dataFrom(javaVersions))))));
+    }
 
-        var uri = UriComponentsBuilder.fromUriString("https://quickchart.io/chart?c={type:'bar',data:{labels:[" + javaVersionNames + "], datasets:[{label:'Version',data:[" + javaVersionValues + "]}]}}")
-                .build().encode().toUri();
-        return restTemplate.exchange(uri, HttpMethod.GET, null, byte[].class);
+    private List<String> dataFrom(List<JavaVersion> javaVersions) {
+        return javaVersions.stream().map(JavaVersion::getVersion).map(String::valueOf).collect(Collectors.toList());
+    }
+
+    private List<String> labelsFrom(List<JavaVersion> javaVersions) {
+        return javaVersions.stream().map(JavaVersion::getName).collect(Collectors.toList());
     }
 }
