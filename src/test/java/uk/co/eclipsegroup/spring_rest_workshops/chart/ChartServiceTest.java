@@ -15,7 +15,7 @@ class ChartServiceTest {
 
     @Test
     void emptyChartRequest_isCreated_forEmptyDataset(SoftAssertions softly) {
-        var chartRequest = chartService.fromJavaVersions(List.of());
+        var chartRequest = chartService.fromJavaVersions(List.of(), "bar");
 
         softly.assertThat(chartRequest.getChart().getType()).isEqualTo("bar");
         softly.assertThat(chartRequest.getChart().getData().getLabels()).isEmpty();
@@ -24,9 +24,9 @@ class ChartServiceTest {
 
     @Test
     void chartRequest_contains_oneJavaVersion(SoftAssertions softly) {
-        var chartRequest = chartService.fromJavaVersions(List.of(new JavaVersion("Java 1.0", 1.0)));
+        var chartRequest = chartService.fromJavaVersions(List.of(new JavaVersion("Java 1.0", 1.0)), "line");
 
-        softly.assertThat(chartRequest.getChart().getType()).isEqualTo("bar");
+        softly.assertThat(chartRequest.getChart().getType()).isEqualTo("line");
         softly.assertThat(chartRequest.getChart().getData().getDatasets())
                 .containsExactly(new Datasets("Version", List.of("1.0")));
         softly.assertThat(chartRequest.getChart().getData().getLabels())
@@ -35,7 +35,7 @@ class ChartServiceTest {
 
     @Test
     void chartRequest_contains_javaVersions(SoftAssertions softly) {
-        var chartRequest = chartService.fromJavaVersions(List.of(new JavaVersion("Java 1.0", 1.0), new JavaVersion("Java 1.1", 1.1)));
+        var chartRequest = chartService.fromJavaVersions(List.of(new JavaVersion("Java 1.0", 1.0), new JavaVersion("Java 1.1", 1.1)), "bar");
 
         softly.assertThat(chartRequest.getChart().getType()).isEqualTo("bar");
         softly.assertThat(chartRequest.getChart().getData().getDatasets())

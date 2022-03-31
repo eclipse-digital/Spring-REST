@@ -25,8 +25,8 @@ public class JavaVersionController {
         javaVersionService.store(javaVersions);
     }
 
-    @GetMapping("chart")
-    public ResponseEntity<byte[]> getChart() {
-        return javaVersionService.generateChart();
+    @GetMapping("chart/{type}")
+    public ResponseEntity<byte[]> getChart(@PathVariable String type) {
+        return javaVersionService.generateChart(type);
     }
 }

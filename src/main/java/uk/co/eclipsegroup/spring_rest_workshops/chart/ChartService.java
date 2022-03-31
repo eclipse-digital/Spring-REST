@@ -16,15 +16,19 @@ import java.util.stream.Collectors;
 public class ChartService {
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public ResponseEntity<byte[]> requestChart(List<JavaVersion> javaVersions) {
-        var chartRequest = fromJavaVersions(javaVersions);
-        var headers = new HttpHeaders();
-        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-        return restTemplate.exchange("https://quickchart.io/chart", HttpMethod.POST, new HttpEntity<>(chartRequest, headers), byte[].class);
+    public ResponseEntity<byte[]> requestChart(List<JavaVersion> javaVersions, String type) {
+        var chartRequest = fromJavaVersions(javaVersions, type);
+        return restTemplate.exchange("https://quickchart.io/chart", HttpMethod.POST, new HttpEntity<>(chartRequest, json()), byte[].class);
     }
 
-    ChartRequest fromJavaVersions(List<JavaVersion> javaVersions) {
-        return new ChartRequest(new Chart("bar", new Data(labelsFrom(javaVersions), List.of(new Datasets("Version", dataFrom(javaVersions))))));
+    ChartRequest fromJavaVersions(List<JavaVersion> javaVersions, String type) {
+        return new ChartRequest(new Chart(type, new Data(labelsFrom(javaVersions), List.of(new Datasets("Version", dataFrom(javaVersions))))));
+    }
+
+    private HttpHeaders json() {
+        var headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
+        return headers;
     }
 
     private List<String> dataFrom(List<JavaVersion> javaVersions) {
