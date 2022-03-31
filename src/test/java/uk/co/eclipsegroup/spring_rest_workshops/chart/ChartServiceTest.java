@@ -7,6 +7,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import uk.co.eclipsegroup.spring_rest_workshops.chart.request.BarDatasets;
 import uk.co.eclipsegroup.spring_rest_workshops.chart.request.Datasets;
 import uk.co.eclipsegroup.spring_rest_workshops.chart.request.LineDatasets;
+import uk.co.eclipsegroup.spring_rest_workshops.chart.request.factory.BarChartRequestFactory;
+import uk.co.eclipsegroup.spring_rest_workshops.chart.request.factory.LineChartRequestFactory;
 import uk.co.eclipsegroup.spring_rest_workshops.java.JavaVersion;
 
 import java.util.List;
@@ -15,7 +17,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 
 @ExtendWith(SoftAssertionsExtension.class)
 class ChartServiceTest {
-    private final ChartService chartService = new ChartService();
+    private final ChartService chartService = new ChartService(List.of(new BarChartRequestFactory(), new LineChartRequestFactory()));
 
     @Test
     void emptyChartRequest_isCreated_forEmptyDataset(SoftAssertions softly) {

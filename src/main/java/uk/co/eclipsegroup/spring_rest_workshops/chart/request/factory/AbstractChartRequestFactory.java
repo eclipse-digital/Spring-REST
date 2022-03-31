@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public abstract class AbstractChartRequestFactory implements ChartRequestFactory{
-    protected ChartRequest chart(String type, List<JavaVersion> javaVersions, List<Datasets> datasets) {
-        return new ChartRequest(new Chart(type, new Data(labelsFrom(javaVersions), datasets)));
+    protected ChartRequest chart(List<JavaVersion> javaVersions, List<Datasets> datasets) {
+        return new ChartRequest(new Chart(type(), new Data(labelsFrom(javaVersions), datasets)));
     }
 
     protected List<String> dataFrom(List<JavaVersion> javaVersions) {
