@@ -4,10 +4,7 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import uk.co.eclipsegroup.spring_rest_workshops.chart.request.Chart;
-import uk.co.eclipsegroup.spring_rest_workshops.chart.request.ChartRequest;
-import uk.co.eclipsegroup.spring_rest_workshops.chart.request.Data;
-import uk.co.eclipsegroup.spring_rest_workshops.chart.request.Datasets;
+import uk.co.eclipsegroup.spring_rest_workshops.chart.request.*;
 import uk.co.eclipsegroup.spring_rest_workshops.java.JavaVersion;
 
 import java.util.List;
@@ -18,9 +15,13 @@ public class ChartService {
     private final RestTemplate restTemplate = new RestTemplate();
 
     public ResponseEntity<byte[]> createChart(List<JavaVersion> javaVersions) {
-        var chartRequest = fromJavaVersions(javaVersions);
-        var httpRequest = new HttpEntity<>(chartRequest, json());
+        HttpEntity<ChartRequest> httpRequest = httpRequest(javaVersions);
         return restTemplate.exchange("https://quickchart.io/chart", HttpMethod.POST, httpRequest, byte[].class);
+    }
+
+    private HttpEntity<ChartRequest> httpRequest(List<JavaVersion> javaVersions) {
+        var chartRequest = fromJavaVersions(javaVersions);
+        return new HttpEntity<>(chartRequest, json());
     }
 
     private HttpHeaders json() {
@@ -30,7 +31,7 @@ public class ChartService {
     }
 
     ChartRequest fromJavaVersions(List<JavaVersion> javaVersions) {
-        return new ChartRequest(new Chart("bar", new Data(namesFrom(javaVersions), List.of(new Datasets("Version", valuesFrom(javaVersions))))));
+        return new ChartRequest(new Chart("bar", new Data(namesFrom(javaVersions), List.of(new BarDatasets("Version", valuesFrom(javaVersions))))));
     }
 
     private List<String> valuesFrom(List<JavaVersion> javaVersions) {
