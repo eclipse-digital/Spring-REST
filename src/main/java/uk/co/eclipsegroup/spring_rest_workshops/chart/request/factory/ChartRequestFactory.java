@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface ChartRequestFactory {
     ChartRequest createChart(List<JavaVersion> javaVersions);
+
+    String type();
 }

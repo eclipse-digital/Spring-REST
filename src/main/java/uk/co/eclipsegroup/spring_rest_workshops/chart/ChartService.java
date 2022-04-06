@@ -11,14 +11,18 @@ import uk.co.eclipsegroup.spring_rest_workshops.java.JavaVersion;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class ChartService {
     private final RestTemplate restTemplate = new RestTemplate();
-    private final Map<String, ChartRequestFactory> chartRequestFactories = Map.of(
-            "bar", new BarChartRequestFactory(),
-            "line", new LineChartRequestFactory()
-    );
+    private final Map<String, ChartRequestFactory> chartRequestFactories;
+
+    public ChartService(List<ChartRequestFactory> chartRequestFactories) {
+        this.chartRequestFactories = chartRequestFactories.stream()
+                .collect(Collectors.toMap(ChartRequestFactory::type, Function.identity()));
+    }
 
     public ResponseEntity<byte[]> createChart(List<JavaVersion> javaVersions, String chartType) {
         HttpEntity<ChartRequest> httpRequest = httpRequest(javaVersions, chartType);
