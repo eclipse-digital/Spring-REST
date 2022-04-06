@@ -3,10 +3,10 @@ package uk.co.eclipsegroup.spring_rest_workshops.chart;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 import uk.co.eclipsegroup.spring_rest_workshops.chart.request.*;
 import uk.co.eclipsegroup.spring_rest_workshops.java.JavaVersion;
 
+import javax.sound.sampled.Line;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,13 +14,13 @@ import java.util.stream.Collectors;
 public class ChartService {
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public ResponseEntity<byte[]> createChart(List<JavaVersion> javaVersions) {
-        HttpEntity<ChartRequest> httpRequest = httpRequest(javaVersions);
+    public ResponseEntity<byte[]> createChart(List<JavaVersion> javaVersions, String chartType) {
+        HttpEntity<ChartRequest> httpRequest = httpRequest(javaVersions, chartType);
         return restTemplate.exchange("https://quickchart.io/chart", HttpMethod.POST, httpRequest, byte[].class);
     }
 
-    private HttpEntity<ChartRequest> httpRequest(List<JavaVersion> javaVersions) {
-        var chartRequest = fromJavaVersions(javaVersions);
+    private HttpEntity<ChartRequest> httpRequest(List<JavaVersion> javaVersions, String chartType) {
+        var chartRequest = fromJavaVersions(javaVersions, chartType);
         return new HttpEntity<>(chartRequest, json());
     }
 
@@ -30,8 +30,14 @@ public class ChartService {
         return httpHeaders;
     }
 
-    ChartRequest fromJavaVersions(List<JavaVersion> javaVersions) {
-        return new ChartRequest(new Chart("bar", new Data(namesFrom(javaVersions), List.of(new BarDatasets("Version", valuesFrom(javaVersions))))));
+    ChartRequest fromJavaVersions(List<JavaVersion> javaVersions, String chartType) {
+        if (chartType.equals("bar")) {
+            return new ChartRequest(new Chart(chartType, new Data(namesFrom(javaVersions), List.of(new BarDatasets("Version", valuesFrom(javaVersions))))));
+        } else if (chartType.equals("line")) {
+            return new ChartRequest(new Chart(chartType, new Data(namesFrom(javaVersions), List.of(new LineDatasets("Version", valuesFrom(javaVersions), false, "pink")))));
+        } else {
+            throw new IllegalArgumentException("Only `bar` and `line` chart types supported `" + chartType + "`");
+        }
     }
 
     private List<String> valuesFrom(List<JavaVersion> javaVersions) {

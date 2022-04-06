@@ -3,7 +3,6 @@ package uk.co.eclipsegroup.spring_rest_workshops.java;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
@@ -25,8 +24,8 @@ public class JavaVersionController {
         javaVersionService.store(javaVersions);
     }
 
-    @GetMapping("chart")
-    public ResponseEntity<byte[]> getChart() {
-        return javaVersionService.generateChart();
+    @GetMapping("chart/{chartType}")
+    public ResponseEntity<byte[]> getChart(@PathVariable String chartType) {
+        return javaVersionService.generateChart(chartType);
     }
 }
