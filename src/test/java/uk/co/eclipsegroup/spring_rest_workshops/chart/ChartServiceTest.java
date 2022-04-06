@@ -53,6 +53,6 @@ class ChartServiceTest {
     @Test
     void cannotCreate_chartOtherThan_barOrLine() {
         assertThatCode(() -> chartService.fromJavaVersions(List.of(), "line123"))
-                .isExactlyInstanceOf(IllegalArgumentException.class);
+                .isExactlyInstanceOf(IllegalChartTypeException.class);
     }
 }

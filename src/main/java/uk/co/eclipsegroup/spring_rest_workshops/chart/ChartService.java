@@ -17,11 +17,10 @@ import java.util.stream.Collectors;
 @Service
 public class ChartService {
     private final RestTemplate restTemplate = new RestTemplate();
-    private final Map<String, ChartRequestFactory> chartRequestFactories;
+    private final List<ChartRequestFactory> chartRequestFactories;
 
     public ChartService(List<ChartRequestFactory> chartRequestFactories) {
-        this.chartRequestFactories = chartRequestFactories.stream()
-                .collect(Collectors.toMap(ChartRequestFactory::type, Function.identity()));
+        this.chartRequestFactories = chartRequestFactories;
     }
 
     public ResponseEntity<byte[]> createChart(List<JavaVersion> javaVersions, String chartType) {
@@ -41,11 +40,10 @@ public class ChartService {
     }
 
     ChartRequest fromJavaVersions(List<JavaVersion> javaVersions, String chartType) {
-        var factory = chartRequestFactories.get(chartType);
-        if (factory != null) {
-            return factory.createChart(javaVersions);
-        } else {
-            throw new IllegalArgumentException("Only `bar` and `line` chart types supported `" + chartType + "`");
-        }
+        return chartRequestFactories.stream()
+                .filter(f -> f.type().equals(chartType))
+                .findFirst()
+                .map(f -> f.createChart(javaVersions))
+                .orElseThrow(() -> new IllegalChartTypeException(chartRequestFactories, chartType));
     }
 }
