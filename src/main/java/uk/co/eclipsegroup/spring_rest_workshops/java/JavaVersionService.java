@@ -25,7 +25,7 @@ public class JavaVersionService {
         javaVersionRepository.save(javaVersions);
     }
 
-    public ResponseEntity<byte[]> generateChart() {
-        return chartService.createChart(javaVersionRepository.fetchAll());
+    public ResponseEntity<byte[]> generateChart(String chartType) {
+        return chartService.createChart(javaVersionRepository.fetchAll(), chartType);
     }
 }
